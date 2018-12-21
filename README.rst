@@ -9,8 +9,8 @@ Introduction
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
 
-.. image:: https://travis-ci.org/adafruit/Adafruit_CircuitPython_ADXL34x.svg?branch=master
-    :target: https://travis-ci.org/adafruit/Adafruit_CircuitPython_ADXL34x
+.. image:: https://travis-ci.com/adafruit/Adafruit_CircuitPython_ADXL34x.svg?branch=master
+    :target: https://travis-ci.com/adafruit/Adafruit_CircuitPython_ADXL34x
     :alt: Build Status
 
 A CircuitPython driver for the ADXL34x family of accelerometers
