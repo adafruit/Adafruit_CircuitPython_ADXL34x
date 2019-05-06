@@ -399,3 +399,13 @@ class ADXL345:
         self._write_register_byte(_REG_INT_ENABLE, 0x0) # disable interrupts for setup
         self._write_register_byte(register, value)
         self._write_register_byte(_REG_INT_ENABLE, active_interrupts)
+
+class ADXL343(ADXL345):
+    """Stub for the ADXL343 3 axis accelerometer
+
+        :param ~busio.I2C i2c_bus: The I2C bus the ADXL345 is connected to.
+        :param address: The I2C device address for the sensor. Default is ``0x53``.
+
+    """
+    def __init__(self, i2c, address=_ADXL345_DEFAULT_ADDRESS):
+        super().__init__(i2c, address)
