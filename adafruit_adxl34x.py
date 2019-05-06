@@ -399,3 +399,8 @@ class ADXL345:
         self._write_register_byte(_REG_INT_ENABLE, 0x0) # disable interrupts for setup
         self._write_register_byte(register, value)
         self._write_register_byte(_REG_INT_ENABLE, active_interrupts)
+
+class ADXL343(ADXL345):
+    """
+    Stub class for the ADXL343 3-axis accelerometer
+    """
