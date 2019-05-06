@@ -407,5 +407,3 @@ class ADXL343(ADXL345):
         :param address: The I2C device address for the sensor. Default is ``0x53``.
 
     """
-    def __init__(self, i2c, address=_ADXL345_DEFAULT_ADDRESS):
-        super().__init__(i2c, address)
