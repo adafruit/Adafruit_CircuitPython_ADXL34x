@@ -401,9 +401,6 @@ class ADXL345:
         self._write_register_byte(_REG_INT_ENABLE, active_interrupts)
 
 class ADXL343(ADXL345):
-    """Stub for the ADXL343 3 axis accelerometer
-
-        :param ~busio.I2C i2c_bus: The I2C bus the ADXL345 is connected to.
-        :param address: The I2C device address for the sensor. Default is ``0x53``.
-
+    """
+    Stub class for the ADXL343 3-axis accelerometer
     """
