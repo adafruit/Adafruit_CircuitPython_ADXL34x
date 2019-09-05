@@ -394,7 +394,7 @@ class ADXL345:
         with self._i2c as i2c:
             i2c.write(self._buffer, start=0, end=2)
 
-    def _config_iterrupt_register(self, register, value):
+    def _config_interrupt_register(self, register, value):
         active_interrupts = self._read_register_unpacked(_REG_INT_ENABLE)
         self._write_register_byte(_REG_INT_ENABLE, 0x0) # disable interrupts for setup
         self._write_register_byte(register, value)
