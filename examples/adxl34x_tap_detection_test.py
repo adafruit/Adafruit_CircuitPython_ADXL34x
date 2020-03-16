@@ -17,5 +17,5 @@ accelerometer.enable_tap_detection()
 while True:
     print("%f %f %f" % accelerometer.acceleration)
 
-    print("Tapped: %s" % accelerometer.events['tap'])
+    print("Tapped: %s" % accelerometer.events["tap"])
     time.sleep(0.5)
