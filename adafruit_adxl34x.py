@@ -311,8 +311,8 @@ class ADXL345:
         :param int tap_count: 1 to detect only single taps, and 2 to detect only double taps.
 
         :param int threshold: A threshold for the tap detection. The scale factor is 62.5 mg/LSB\
-        The higher the value the less sensitive the detection. This changes based on the\
-        accelerometer range.
+        The higher the value the less sensitive the detection.
+
 
         :param int duration: This caps the duration of the impulse above ``threshhold``.\
         Anything above ``duration`` won't register as a tap. The scale factor is 625 µs/LSB
