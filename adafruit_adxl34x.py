@@ -52,7 +52,6 @@ except ImportError:
     from ustruct import unpack
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_ADXL34x.git"
-# pylint: disable=bad-whitespace
 _ADXL345_DEFAULT_ADDRESS = const(0x53)  # Assumes ALT address pin low
 
 # Conversion factors
@@ -155,7 +154,6 @@ class Range:  # pylint: disable=too-few-public-methods
     RANGE_2_G = const(0b00)  # +/- 2g (default value)
 
 
-# pylint: enable=bad-whitespace
 class ADXL345:
     """Driver for the ADXL345 3 axis accelerometer
 
