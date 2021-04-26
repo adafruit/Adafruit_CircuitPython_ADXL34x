@@ -12,16 +12,19 @@ A driver for the ADXL34x 3-axis accelerometer family
 
 Based on drivers by K. Townsend and Tony DiCola
 
+
 Implementation Notes
 --------------------
 
 **Hardware:**
-https://www.adafruit.com/product/1231
+
+* Adafruit `ADXL345 Digital Accelerometer
+  <https://www.adafruit.com/product/1231>`_ (Product ID: 1231)
 
 **Software and Dependencies:**
 
 * Adafruit CircuitPython firmware for the supported boards:
-  https://github.com/adafruit/circuitpython/releases
+  https://circuitpython.org/downloads
 
 * Adafruit's Bus Device library: https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
 """
@@ -140,8 +143,32 @@ class Range:  # pylint: disable=too-few-public-methods
 class ADXL345:
     """Driver for the ADXL345 3 axis accelerometer
 
-    :param ~busio.I2C i2c_bus: The I2C bus the ADXL345 is connected to.
-    :param address: The I2C device address for the sensor. Default is ``0x53``.
+    :param ~busio.I2C i2c: The I2C bus the ADXL345 is connected to.
+    :param address: The I2C device address for the sensor. Default is :const:`0x53`.
+
+    **Quickstart: Importing and using the device**
+
+        Here is an example of using the :class:`ADXL345` class.
+        First you will need to import the libraries to use the sensor
+
+        .. code-block:: python
+
+            import board
+            import adafruit_adxl34x
+
+        Once this is done you can define your `board.I2C` object and define your sensor object
+
+        .. code-block:: python
+
+            i2c = board.I2C()  # uses board.SCL and board.SDA
+            accelerometer = adafruit_adxl34x.ADXL343(i2c)
+
+
+        Now you have access to the :attr:`acceleration` attribute
+
+        .. code-block:: python
+
+            acceleration = accelerometer.acceleration
 
     """
 
@@ -158,7 +185,7 @@ class ADXL345:
 
     @property
     def acceleration(self):
-        """The x, y, z acceleration values returned in a 3-tuple in m / s ^ 2."""
+        """The x, y, z acceleration values returned in a 3-tuple in :math:`m / s ^ 2`"""
         x, y, z = unpack("<hhh", self._read_register(_REG_DATAX0, 6))
         x = x * _ADXL345_MG2G_MULTIPLIER * _STANDARD_GRAVITY
         y = y * _ADXL345_MG2G_MULTIPLIER * _STANDARD_GRAVITY
@@ -168,7 +195,8 @@ class ADXL345:
     @property
     def events(self):
         """
-        ``events`` will return a dictionary with a key for each event type that has been enabled.
+        :attr:`events` will return a dictionary with a key for each
+        event type that has been enabled.
         The possible keys are:
 
         +------------+----------------------------------------------------------------------------+
@@ -255,11 +283,13 @@ class ADXL345:
         register as dropped. The scale factor is 62.5 mg/LSB.
 
         :param int time: The amount of time that acceleration on all axes must be less than\
-        ``threshhold`` to register as dropped. The scale factor is 5 ms/LSB. Values between 100 ms\
+        ``threshold`` to register as dropped. The scale factor is 5 ms/LSB. Values between 100 ms\
         and 350 ms (20 to 70) are recommended.
 
         If you wish to set them yourself rather than using the defaults,
-        you must use keyword arguments::
+        you must use keyword arguments:
+
+        .. code-block:: python
 
             accelerometer.enable_freefall_detection(time=30)
 
@@ -294,19 +324,20 @@ class ADXL345:
         :param int threshold: A threshold for the tap detection. The scale factor is 62.5 mg/LSB\
         The higher the value the less sensitive the detection.
 
-
-        :param int duration: This caps the duration of the impulse above ``threshhold``.\
+        :param int duration: This caps the duration of the impulse above ``threshold``.\
         Anything above ``duration`` won't register as a tap. The scale factor is 625 µs/LSB
 
-        :param int latency(double tap only): The length of time after the initial impulse\
+        :param int latency: (double tap only) The length of time after the initial impulse\
         falls below ``threshold`` to start the window looking for a second impulse.\
         The scale factor is 1.25 ms/LSB.
 
-        :param int window(double tap only): The length of the window in which to look for a\
+        :param int window: (double tap only) The length of the window in which to look for a\
         second tap. The scale factor is 1.25 ms/LSB
 
         If you wish to set them yourself rather than using the defaults,
-        you must use keyword arguments::
+        you must use keyword arguments:
+
+        .. code-block:: python
 
             accelerometer.enable_tap_detection(duration=30, threshold=25)
 

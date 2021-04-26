@@ -23,10 +23,12 @@ Table of Contents
 .. toctree::
     :caption: Tutorials
 
+    ADXL345 - Triple-Axis Accelerometer (+-2g/4g/8g/16g) w/ I2C/SPI Learning Guide <https://learn.adafruit.com/adxl345-digital-accelerometer>
+
 .. toctree::
     :caption: Related Products
 
-.. https://www.adafruit.com/product/1231
+    ADXL345 - Triple-Axis Accelerometer (+-2g/4g/8g/16g) w/ I2C/SPI <https://www.adafruit.com/product/1231>
 
 
 .. toctree::
