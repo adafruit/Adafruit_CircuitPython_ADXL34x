@@ -53,14 +53,15 @@ To install in a virtual environment in your current project:
 
 Usage Example
 =============
-::
+.. code:: python3
 
     import time
     import board
-    import busio
     import adafruit_adxl34x
-    i2c = busio.I2C(board.SCL, board.SDA)
+
+    i2c = board.I2C()  # uses board.SCL and board.SDA
     accelerometer = adafruit_adxl34x.ADXL345(i2c)
+
     while True:
         print("%f %f %f"%accelerometer.acceleration)
         time.sleep(1)
