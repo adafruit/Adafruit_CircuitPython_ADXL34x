@@ -66,6 +66,11 @@ Usage Example
         print("%f %f %f"%accelerometer.acceleration)
         time.sleep(1)
 
+Documentation
+=============
+
+API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/adxl34x/en/latest/>`_.
+
 Contributing
 ============
 
