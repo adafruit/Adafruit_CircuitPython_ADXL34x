@@ -28,14 +28,11 @@ Implementation Notes
 
 * Adafruit's Bus Device library: https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
 """
+from struct import unpack
 
 from micropython import const
 from adafruit_bus_device import i2c_device
 
-try:
-    from struct import unpack
-except ImportError:
-    from ustruct import unpack
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_ADXL34x.git"
 _ADXL345_DEFAULT_ADDRESS = const(0x53)  # Assumes ALT address pin low
