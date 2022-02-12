@@ -35,8 +35,9 @@ from adafruit_bus_device import i2c_device
 
 try:
     from typing import Tuple, Dict
+
     # This is only needed for typing
-    import busio # pylint: disable=unused-import
+    import busio  # pylint: disable=unused-import
 except ImportError:
     pass
 
