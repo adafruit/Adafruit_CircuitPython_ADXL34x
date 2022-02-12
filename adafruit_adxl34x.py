@@ -32,7 +32,6 @@ from struct import unpack
 
 from micropython import const
 from adafruit_bus_device import i2c_device
-from adafruit_register.i2c_bit import ROBit, RWBit
 import busio
 
 try:
@@ -377,7 +376,7 @@ class ADXL345:
                 "tap must be 0 to disable, 1 for single tap, or 2 for double tap"
             )
 
-    def disable_tap_detection(self) -> Nonr:
+    def disable_tap_detection(self) -> None:
         "Disable tap detection"
         active_interrupts = self._read_register_unpacked(_REG_INT_ENABLE)
         active_interrupts &= ~_INT_SINGLE_TAP
