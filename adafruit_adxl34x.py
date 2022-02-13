@@ -33,49 +33,57 @@ from struct import unpack
 from micropython import const
 from adafruit_bus_device import i2c_device
 
+try:
+    from typing import Tuple, Dict
+
+    # This is only needed for typing
+    import busio  # pylint: disable=unused-import
+except ImportError:
+    pass
+
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_ADXL34x.git"
-_ADXL345_DEFAULT_ADDRESS = const(0x53)  # Assumes ALT address pin low
+_ADXL345_DEFAULT_ADDRESS: int = const(0x53)  # Assumes ALT address pin low
 
 # Conversion factors
-_ADXL345_MG2G_MULTIPLIER = 0.004  # 4mg per lsb
-_STANDARD_GRAVITY = 9.80665  # earth standard gravity
+_ADXL345_MG2G_MULTIPLIER: float = 0.004  # 4mg per lsb
+_STANDARD_GRAVITY: float = 9.80665  # earth standard gravity
 
-_REG_DEVID = const(0x00)  # Device ID
-_REG_THRESH_TAP = const(0x1D)  # Tap threshold
-_REG_OFSX = const(0x1E)  # X-axis offset
-_REG_OFSY = const(0x1F)  # Y-axis offset
-_REG_OFSZ = const(0x20)  # Z-axis offset
-_REG_DUR = const(0x21)  # Tap duration
-_REG_LATENT = const(0x22)  # Tap latency
-_REG_WINDOW = const(0x23)  # Tap window
-_REG_THRESH_ACT = const(0x24)  # Activity threshold
-_REG_THRESH_INACT = const(0x25)  # Inactivity threshold
-_REG_TIME_INACT = const(0x26)  # Inactivity time
-_REG_ACT_INACT_CTL = const(0x27)  # Axis enable control for [in]activity detection
-_REG_THRESH_FF = const(0x28)  # Free-fall threshold
-_REG_TIME_FF = const(0x29)  # Free-fall time
-_REG_TAP_AXES = const(0x2A)  # Axis control for single/double tap
-_REG_ACT_TAP_STATUS = const(0x2B)  # Source for single/double tap
-_REG_BW_RATE = const(0x2C)  # Data rate and power mode control
-_REG_POWER_CTL = const(0x2D)  # Power-saving features control
-_REG_INT_ENABLE = const(0x2E)  # Interrupt enable control
-_REG_INT_MAP = const(0x2F)  # Interrupt mapping control
-_REG_INT_SOURCE = const(0x30)  # Source of interrupts
-_REG_DATA_FORMAT = const(0x31)  # Data format control
-_REG_DATAX0 = const(0x32)  # X-axis data 0
-_REG_DATAX1 = const(0x33)  # X-axis data 1
-_REG_DATAY0 = const(0x34)  # Y-axis data 0
-_REG_DATAY1 = const(0x35)  # Y-axis data 1
-_REG_DATAZ0 = const(0x36)  # Z-axis data 0
-_REG_DATAZ1 = const(0x37)  # Z-axis data 1
-_REG_FIFO_CTL = const(0x38)  # FIFO control
-_REG_FIFO_STATUS = const(0x39)  # FIFO status
-_INT_SINGLE_TAP = const(0b01000000)  # SINGLE_TAP bit
-_INT_DOUBLE_TAP = const(0b00100000)  # DOUBLE_TAP bit
-_INT_ACT = const(0b00010000)  # ACT bit
-_INT_INACT = const(0b00001000)  # INACT bit
-_INT_FREE_FALL = const(0b00000100)  # FREE_FALL  bit
+_REG_DEVID: int = const(0x00)  # Device ID
+_REG_THRESH_TAP: int = const(0x1D)  # Tap threshold
+_REG_OFSX: int = const(0x1E)  # X-axis offset
+_REG_OFSY: int = const(0x1F)  # Y-axis offset
+_REG_OFSZ: int = const(0x20)  # Z-axis offset
+_REG_DUR: int = const(0x21)  # Tap duration
+_REG_LATENT: int = const(0x22)  # Tap latency
+_REG_WINDOW: int = const(0x23)  # Tap window
+_REG_THRESH_ACT: int = const(0x24)  # Activity threshold
+_REG_THRESH_INACT: int = const(0x25)  # Inactivity threshold
+_REG_TIME_INACT: int = const(0x26)  # Inactivity time
+_REG_ACT_INACT_CTL: int = const(0x27)  # Axis enable control for [in]activity detection
+_REG_THRESH_FF: int = const(0x28)  # Free-fall threshold
+_REG_TIME_FF: int = const(0x29)  # Free-fall time
+_REG_TAP_AXES: int = const(0x2A)  # Axis control for single/double tap
+_REG_ACT_TAP_STATUS: int = const(0x2B)  # Source for single/double tap
+_REG_BW_RATE: int = const(0x2C)  # Data rate and power mode control
+_REG_POWER_CTL: int = const(0x2D)  # Power-saving features control
+_REG_INT_ENABLE: int = const(0x2E)  # Interrupt enable control
+_REG_INT_MAP: int = const(0x2F)  # Interrupt mapping control
+_REG_INT_SOURCE: int = const(0x30)  # Source of interrupts
+_REG_DATA_FORMAT: int = const(0x31)  # Data format control
+_REG_DATAX0: int = const(0x32)  # X-axis data 0
+_REG_DATAX1: int = const(0x33)  # X-axis data 1
+_REG_DATAY0: int = const(0x34)  # Y-axis data 0
+_REG_DATAY1: int = const(0x35)  # Y-axis data 1
+_REG_DATAZ0: int = const(0x36)  # Z-axis data 0
+_REG_DATAZ1: int = const(0x37)  # Z-axis data 1
+_REG_FIFO_CTL: int = const(0x38)  # FIFO control
+_REG_FIFO_STATUS: int = const(0x39)  # FIFO status
+_INT_SINGLE_TAP: int = const(0b01000000)  # SINGLE_TAP bit
+_INT_DOUBLE_TAP: int = const(0b00100000)  # DOUBLE_TAP bit
+_INT_ACT: int = const(0b00010000)  # ACT bit
+_INT_INACT: int = const(0b00001000)  # INACT bit
+_INT_FREE_FALL: int = const(0b00000100)  # FREE_FALL  bit
 
 
 class DataRate:  # pylint: disable=too-few-public-methods
@@ -101,22 +109,22 @@ class DataRate:  # pylint: disable=too-few-public-methods
 
     """
 
-    RATE_3200_HZ = const(0b1111)  # 1600Hz Bandwidth   140mA IDD
-    RATE_1600_HZ = const(0b1110)  #  800Hz Bandwidth    90mA IDD
-    RATE_800_HZ = const(0b1101)  #  400Hz Bandwidth   140mA IDD
-    RATE_400_HZ = const(0b1100)  #  200Hz Bandwidth   140mA IDD
-    RATE_200_HZ = const(0b1011)  #  100Hz Bandwidth   140mA IDD
-    RATE_100_HZ = const(0b1010)  #   50Hz Bandwidth   140mA IDD
-    RATE_50_HZ = const(0b1001)  #   25Hz Bandwidth    90mA IDD
-    RATE_25_HZ = const(0b1000)  # 12.5Hz Bandwidth    60mA IDD
-    RATE_12_5_HZ = const(0b0111)  # 6.25Hz Bandwidth    50mA IDD
-    RATE_6_25HZ = const(0b0110)  # 3.13Hz Bandwidth    45mA IDD
-    RATE_3_13_HZ = const(0b0101)  # 1.56Hz Bandwidth    40mA IDD
-    RATE_1_56_HZ = const(0b0100)  # 0.78Hz Bandwidth    34mA IDD
-    RATE_0_78_HZ = const(0b0011)  # 0.39Hz Bandwidth    23mA IDD
-    RATE_0_39_HZ = const(0b0010)  # 0.20Hz Bandwidth    23mA IDD
-    RATE_0_20_HZ = const(0b0001)  # 0.10Hz Bandwidth    23mA IDD
-    RATE_0_10_HZ = const(0b0000)  # 0.05Hz Bandwidth    23mA IDD (default value)
+    RATE_3200_HZ: int = const(0b1111)  # 1600Hz Bandwidth   140mA IDD
+    RATE_1600_HZ: int = const(0b1110)  #  800Hz Bandwidth    90mA IDD
+    RATE_800_HZ: int = const(0b1101)  #  400Hz Bandwidth   140mA IDD
+    RATE_400_HZ: int = const(0b1100)  #  200Hz Bandwidth   140mA IDD
+    RATE_200_HZ: int = const(0b1011)  #  100Hz Bandwidth   140mA IDD
+    RATE_100_HZ: int = const(0b1010)  #   50Hz Bandwidth   140mA IDD
+    RATE_50_HZ: int = const(0b1001)  #   25Hz Bandwidth    90mA IDD
+    RATE_25_HZ: int = const(0b1000)  # 12.5Hz Bandwidth    60mA IDD
+    RATE_12_5_HZ: int = const(0b0111)  # 6.25Hz Bandwidth    50mA IDD
+    RATE_6_25HZ: int = const(0b0110)  # 3.13Hz Bandwidth    45mA IDD
+    RATE_3_13_HZ: int = const(0b0101)  # 1.56Hz Bandwidth    40mA IDD
+    RATE_1_56_HZ: int = const(0b0100)  # 0.78Hz Bandwidth    34mA IDD
+    RATE_0_78_HZ: int = const(0b0011)  # 0.39Hz Bandwidth    23mA IDD
+    RATE_0_39_HZ: int = const(0b0010)  # 0.20Hz Bandwidth    23mA IDD
+    RATE_0_20_HZ: int = const(0b0001)  # 0.10Hz Bandwidth    23mA IDD
+    RATE_0_10_HZ: int = const(0b0000)  # 0.05Hz Bandwidth    23mA IDD (default value)
 
 
 class Range:  # pylint: disable=too-few-public-methods
@@ -131,10 +139,10 @@ class Range:  # pylint: disable=too-few-public-methods
 
     """
 
-    RANGE_16_G = const(0b11)  # +/- 16g
-    RANGE_8_G = const(0b10)  # +/- 8g
-    RANGE_4_G = const(0b01)  # +/- 4g
-    RANGE_2_G = const(0b00)  # +/- 2g (default value)
+    RANGE_16_G: int = const(0b11)  # +/- 16g
+    RANGE_8_G: int = const(0b10)  # +/- 8g
+    RANGE_4_G: int = const(0b01)  # +/- 4g
+    RANGE_2_G: int = const(0b00)  # +/- 2g (default value)
 
 
 class ADXL345:
@@ -169,7 +177,7 @@ class ADXL345:
 
     """
 
-    def __init__(self, i2c, address=_ADXL345_DEFAULT_ADDRESS):
+    def __init__(self, i2c: busio.I2C, address: int = _ADXL345_DEFAULT_ADDRESS):
 
         self._i2c = i2c_device.I2CDevice(i2c, address)
         self._buffer = bytearray(6)
@@ -181,7 +189,7 @@ class ADXL345:
         self._event_status = {}
 
     @property
-    def acceleration(self):
+    def acceleration(self) -> Tuple[int, int, int]:
         """The x, y, z acceleration values returned in a 3-tuple in :math:`m / s ^ 2`"""
         x, y, z = unpack("<hhh", self._read_register(_REG_DATAX0, 6))
         x = x * _ADXL345_MG2G_MULTIPLIER * _STANDARD_GRAVITY
@@ -190,7 +198,7 @@ class ADXL345:
         return (x, y, z)
 
     @property
-    def events(self):
+    def events(self) -> Dict[str, bool]:
         """
         :attr:`events` will return a dictionary with a key for each
         event type that has been enabled.
@@ -237,7 +245,7 @@ class ADXL345:
 
         return self._event_status
 
-    def enable_motion_detection(self, *, threshold=18):
+    def enable_motion_detection(self, *, threshold: int = 18):
         """
         The activity detection parameters.
 
@@ -263,7 +271,7 @@ class ADXL345:
         self._write_register_byte(_REG_INT_ENABLE, active_interrupts)
         self._enabled_interrupts["motion"] = True
 
-    def disable_motion_detection(self):
+    def disable_motion_detection(self) -> None:
         """
         Disable motion detection
         """
@@ -272,7 +280,7 @@ class ADXL345:
         self._write_register_byte(_REG_INT_ENABLE, active_interrupts)
         self._enabled_interrupts.pop("motion")
 
-    def enable_freefall_detection(self, *, threshold=10, time=25):
+    def enable_freefall_detection(self, *, threshold: int = 10, time: int = 25) -> None:
         """
         Freefall detection parameters:
 
@@ -303,7 +311,7 @@ class ADXL345:
         self._write_register_byte(_REG_INT_ENABLE, active_interrupts)
         self._enabled_interrupts["freefall"] = True
 
-    def disable_freefall_detection(self):
+    def disable_freefall_detection(self) -> None:
         "Disable freefall detection"
         active_interrupts = self._read_register_unpacked(_REG_INT_ENABLE)
         active_interrupts &= ~_INT_FREE_FALL
@@ -311,8 +319,14 @@ class ADXL345:
         self._enabled_interrupts.pop("freefall")
 
     def enable_tap_detection(
-        self, *, tap_count=1, threshold=20, duration=50, latency=20, window=255
-    ):  # pylint: disable=line-too-long
+        self,
+        *,
+        tap_count: int = 1,
+        threshold: int = 20,
+        duration: int = 50,
+        latency: int = 20,
+        window: int = 255
+    ):
         """
         The tap detection parameters.
 
@@ -364,7 +378,7 @@ class ADXL345:
                 "tap must be 0 to disable, 1 for single tap, or 2 for double tap"
             )
 
-    def disable_tap_detection(self):
+    def disable_tap_detection(self) -> None:
         "Disable tap detection"
         active_interrupts = self._read_register_unpacked(_REG_INT_ENABLE)
         active_interrupts &= ~_INT_SINGLE_TAP
@@ -373,23 +387,23 @@ class ADXL345:
         self._enabled_interrupts.pop("tap")
 
     @property
-    def data_rate(self):
+    def data_rate(self) -> int:
         """The data rate of the sensor."""
         rate_register = self._read_register_unpacked(_REG_BW_RATE)
         return rate_register & 0x0F
 
     @data_rate.setter
-    def data_rate(self, val):
+    def data_rate(self, val: int) -> None:
         self._write_register_byte(_REG_BW_RATE, val)
 
     @property
-    def range(self):
+    def range(self) -> int:
         """The measurement range of the sensor."""
         range_register = self._read_register_unpacked(_REG_DATA_FORMAT)
         return range_register & 0x03
 
     @range.setter
-    def range(self, val):
+    def range(self, val: int) -> None:
         # read the current value of the data format register
         format_register = self._read_register_unpacked(_REG_DATA_FORMAT)
 
@@ -403,20 +417,20 @@ class ADXL345:
         # write the updated values
         self._write_register_byte(_REG_DATA_FORMAT, format_register)
 
-    def _read_clear_interrupt_source(self):
+    def _read_clear_interrupt_source(self) -> int:
         return self._read_register_unpacked(_REG_INT_SOURCE)
 
-    def _read_register_unpacked(self, register):
+    def _read_register_unpacked(self, register: int) -> int:
         return unpack("<b", self._read_register(register, 1))[0]
 
-    def _read_register(self, register, length):
+    def _read_register(self, register: int, length: int) -> int:
         self._buffer[0] = register & 0xFF
         with self._i2c as i2c:
             i2c.write(self._buffer, start=0, end=1)
             i2c.readinto(self._buffer, start=0, end=length)
             return self._buffer[0:length]
 
-    def _write_register_byte(self, register, value):
+    def _write_register_byte(self, register: int, value: int) -> None:
         self._buffer[0] = register & 0xFF
         self._buffer[1] = value & 0xFF
         with self._i2c as i2c:
