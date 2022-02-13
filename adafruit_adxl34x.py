@@ -41,8 +41,8 @@ try:
 except ImportError:
     pass
 
-__version__: str = "0.0.0-auto.0"
-__repo__: str = "https://github.com/adafruit/Adafruit_CircuitPython_ADXL34x.git"
+__version__ = "0.0.0-auto.0"
+__repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_ADXL34x.git"
 _ADXL345_DEFAULT_ADDRESS: int = const(0x53)  # Assumes ALT address pin low
 
 # Conversion factors
