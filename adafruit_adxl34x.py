@@ -36,7 +36,7 @@ try:
     from typing import Tuple, Dict
 
     # This is only needed for typing
-    import busio  # pylint: disable=unused-import
+    import busio
 except ImportError:
     pass
 
