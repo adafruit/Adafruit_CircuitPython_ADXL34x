@@ -29,7 +29,6 @@ Implementation Notes
 * Adafruit's Bus Device library: https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
 """
 from struct import unpack
-
 from micropython import const
 from adafruit_bus_device import i2c_device
 
@@ -37,7 +36,7 @@ try:
     from typing import Tuple, Dict
 
     # This is only needed for typing
-    import busio  # pylint: disable=unused-import
+    import busio
 except ImportError:
     pass
 
@@ -110,12 +109,12 @@ class DataRate:  # pylint: disable=too-few-public-methods
     """
 
     RATE_3200_HZ: int = const(0b1111)  # 1600Hz Bandwidth   140mA IDD
-    RATE_1600_HZ: int = const(0b1110)  #  800Hz Bandwidth    90mA IDD
-    RATE_800_HZ: int = const(0b1101)  #  400Hz Bandwidth   140mA IDD
-    RATE_400_HZ: int = const(0b1100)  #  200Hz Bandwidth   140mA IDD
-    RATE_200_HZ: int = const(0b1011)  #  100Hz Bandwidth   140mA IDD
-    RATE_100_HZ: int = const(0b1010)  #   50Hz Bandwidth   140mA IDD
-    RATE_50_HZ: int = const(0b1001)  #   25Hz Bandwidth    90mA IDD
+    RATE_1600_HZ: int = const(0b1110)  # 800Hz Bandwidth    90mA IDD
+    RATE_800_HZ: int = const(0b1101)  # 400Hz Bandwidth   140mA IDD
+    RATE_400_HZ: int = const(0b1100)  # 200Hz Bandwidth   140mA IDD
+    RATE_200_HZ: int = const(0b1011)  # 100Hz Bandwidth   140mA IDD
+    RATE_100_HZ: int = const(0b1010)  # 50Hz Bandwidth   140mA IDD
+    RATE_50_HZ: int = const(0b1001)  # 25Hz Bandwidth    90mA IDD
     RATE_25_HZ: int = const(0b1000)  # 12.5Hz Bandwidth    60mA IDD
     RATE_12_5_HZ: int = const(0b0111)  # 6.25Hz Bandwidth    50mA IDD
     RATE_6_25HZ: int = const(0b0110)  # 3.13Hz Bandwidth    45mA IDD
@@ -195,7 +194,22 @@ class ADXL345:
         x = x * _ADXL345_MG2G_MULTIPLIER * _STANDARD_GRAVITY
         y = y * _ADXL345_MG2G_MULTIPLIER * _STANDARD_GRAVITY
         z = z * _ADXL345_MG2G_MULTIPLIER * _STANDARD_GRAVITY
-        return (x, y, z)
+        return x, y, z
+
+    @property
+    def raw_x(self) -> int:
+        """The raw x value."""
+        return unpack("<h", self._read_register(_REG_DATAX0, 2))[0]
+
+    @property
+    def raw_y(self) -> int:
+        """The raw y value."""
+        return unpack("<h", self._read_register(_REG_DATAY0, 2))[0]
+
+    @property
+    def raw_z(self) -> int:
+        """The raw z value."""
+        return unpack("<h", self._read_register(_REG_DATAZ0, 2))[0]
 
     @property
     def events(self) -> Dict[str, bool]:
@@ -312,7 +326,7 @@ class ADXL345:
         self._enabled_interrupts["freefall"] = True
 
     def disable_freefall_detection(self) -> None:
-        "Disable freefall detection"
+        """Disable freefall detection"""
         active_interrupts = self._read_register_unpacked(_REG_INT_ENABLE)
         active_interrupts &= ~_INT_FREE_FALL
         self._write_register_byte(_REG_INT_ENABLE, active_interrupts)
@@ -379,7 +393,7 @@ class ADXL345:
             )
 
     def disable_tap_detection(self) -> None:
-        "Disable tap detection"
+        """Disable tap detection"""
         active_interrupts = self._read_register_unpacked(_REG_INT_ENABLE)
         active_interrupts &= ~_INT_SINGLE_TAP
         active_interrupts &= ~_INT_DOUBLE_TAP
@@ -416,6 +430,23 @@ class ADXL345:
 
         # write the updated values
         self._write_register_byte(_REG_DATA_FORMAT, format_register)
+
+    @property
+    def offset(self) -> Tuple[int, int, int]:
+        """
+        The x, y, z offsets as a tuple of raw count values.
+
+        See offset_calibration example for usage.
+        """
+        x_offset, y_offset, z_offset = unpack("<bbb", self._read_register(_REG_OFSX, 3))
+        return x_offset, y_offset, z_offset
+
+    @offset.setter
+    def offset(self, val: Tuple[int, int, int]) -> None:
+        x_offset, y_offset, z_offset = val
+        self._write_register_byte(_REG_OFSX, x_offset)
+        self._write_register_byte(_REG_OFSY, y_offset)
+        self._write_register_byte(_REG_OFSZ, z_offset)
 
     def _read_clear_interrupt_source(self) -> int:
         return self._read_register_unpacked(_REG_INT_SOURCE)
