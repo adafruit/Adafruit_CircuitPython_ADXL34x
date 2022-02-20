@@ -87,7 +87,8 @@ _INT_FREE_FALL: int = const(0b00000100)  # FREE_FALL  bit
 
 class DataRate:  # pylint: disable=too-few-public-methods
     """An enum-like class representing the possible data rates.
-    Possible values are
+
+    Possible values are:
 
     - ``DataRate.RATE_3200_HZ``
     - ``DataRate.RATE_1600_HZ``
@@ -129,7 +130,7 @@ class DataRate:  # pylint: disable=too-few-public-methods
 class Range:  # pylint: disable=too-few-public-methods
     """An enum-like class representing the possible measurement ranges in +/- G.
 
-    Possible values are
+    Possible values are:
 
     - ``Range.RANGE_16_G``
     - ``Range.RANGE_8_G``
@@ -148,7 +149,7 @@ class ADXL345:
     """Driver for the ADXL345 3 axis accelerometer
 
     :param ~busio.I2C i2c: The I2C bus the ADXL345 is connected to.
-    :param address: The I2C device address for the sensor. Default is :const:`0x53`.
+    :param int address: The I2C device address for the sensor. Default is :const:`0x53`.
 
     **Quickstart: Importing and using the device**
 
