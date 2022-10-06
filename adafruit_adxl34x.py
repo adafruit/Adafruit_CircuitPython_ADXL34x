@@ -389,9 +389,7 @@ class ADXL345:
             self._write_register_byte(_REG_INT_ENABLE, active_interrupts)
             self._enabled_interrupts["tap"] = 2
         else:
-            raise ValueError(
-                "tap must be 0 to disable, 1 for single tap, or 2 for double tap"
-            )
+            raise ValueError("tap_count must be 1 for single tap or 2 for double tap")
 
     def disable_tap_detection(self) -> None:
         """Disable tap detection"""
