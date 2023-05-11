@@ -178,7 +178,6 @@ class ADXL345:
     """
 
     def __init__(self, i2c: busio.I2C, address: int = _ADXL345_DEFAULT_ADDRESS):
-
         self._i2c = i2c_device.I2CDevice(i2c, address)
         self._buffer = bytearray(6)
         # set the 'measure' bit in to enable measurement
