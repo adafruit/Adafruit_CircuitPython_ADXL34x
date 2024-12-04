@@ -37,8 +37,10 @@ board.DISPLAY.root_group = main_group
 
 # begin main loop
 while True:
-    acceleration_x, acceleration_y, acceleration_z = accelerometer.acceleration
+    acc_x, acc_y, acc_z = accelerometer.acceleration
     # Update the label.text property to change the text on the display
-    display_output_label.text = f"x:{acceleration_x:.1f} m/s^2 y:{acceleration_y:.1f} m/s^2 z:{acceleration_z:.1f} m/s^2"
+    display_output_label.text = (
+        f"x:{acc_x:.1f} m/s^2 y:{acc_y:.1f} m/s^2 z:{acc_z:.1f} m/s^2"
+    )
     # wait for a bit
     time.sleep(1)
