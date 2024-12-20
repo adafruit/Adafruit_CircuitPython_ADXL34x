@@ -33,3 +33,12 @@ The accelerometer can also be configured to detect taps.
 .. literalinclude:: ../examples/adxl34x_tap_detection_test.py
     :caption: examples/adxl34x_tap_detection_test.py
     :linenos:
+
+DisplayIO Simpletest
+---------------------
+
+This is a simple test for boards with built-in display.
+
+.. literalinclude:: ../examples/adxl34x_displayio_simpletest.py
+    :caption: examples/adxl34x_displayio_simpletest.py
+    :linenos:
