@@ -2,7 +2,9 @@
 # SPDX-License-Identifier: MIT
 
 import time
+
 import board
+
 import adafruit_adxl34x
 
 i2c = board.I2C()  # uses board.SCL and board.SDA
@@ -18,7 +20,7 @@ accelerometer.enable_motion_detection()
 # accelerometer.enable_motion_detection(threshold=10)
 
 while True:
-    print("%f %f %f" % accelerometer.acceleration)
+    print("{} {} {}".format(*accelerometer.acceleration))
 
-    print("Motion detected: %s" % accelerometer.events["motion"])
+    print("Motion detected: {}".format(accelerometer.events["motion"]))
     time.sleep(0.5)

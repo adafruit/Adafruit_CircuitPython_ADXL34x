@@ -28,12 +28,14 @@ Implementation Notes
 
 * Adafruit's Bus Device library: https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
 """
+
 from struct import unpack
-from micropython import const
+
 from adafruit_bus_device import i2c_device
+from micropython import const
 
 try:
-    from typing import Tuple, Dict
+    from typing import Dict, Tuple
 
     # This is only needed for typing
     import busio
@@ -85,7 +87,7 @@ _INT_INACT: int = const(0b00001000)  # INACT bit
 _INT_FREE_FALL: int = const(0b00000100)  # FREE_FALL  bit
 
 
-class DataRate:  # pylint: disable=too-few-public-methods
+class DataRate:
     """An enum-like class representing the possible data rates.
 
     Possible values are:
@@ -127,7 +129,7 @@ class DataRate:  # pylint: disable=too-few-public-methods
     RATE_0_10_HZ: int = const(0b0000)  # 0.05Hz Bandwidth    23mA IDD (default value)
 
 
-class Range:  # pylint: disable=too-few-public-methods
+class Range:
     """An enum-like class representing the possible measurement ranges in +/- G.
 
     Possible values are:
@@ -240,22 +242,14 @@ class ADXL345:
 
         for event_type, value in self._enabled_interrupts.items():
             if event_type == "motion":
-                self._event_status[event_type] = (
-                    interrupt_source_register & _INT_ACT > 0
-                )
+                self._event_status[event_type] = interrupt_source_register & _INT_ACT > 0
             if event_type == "tap":
                 if value == 1:
-                    self._event_status[event_type] = (
-                        interrupt_source_register & _INT_SINGLE_TAP > 0
-                    )
+                    self._event_status[event_type] = interrupt_source_register & _INT_SINGLE_TAP > 0
                 else:
-                    self._event_status[event_type] = (
-                        interrupt_source_register & _INT_DOUBLE_TAP > 0
-                    )
+                    self._event_status[event_type] = interrupt_source_register & _INT_DOUBLE_TAP > 0
             if event_type == "freefall":
-                self._event_status[event_type] = (
-                    interrupt_source_register & _INT_FREE_FALL > 0
-                )
+                self._event_status[event_type] = interrupt_source_register & _INT_FREE_FALL > 0
 
         return self._event_status
 
@@ -275,9 +269,7 @@ class ADXL345:
         active_interrupts = self._read_register_unpacked(_REG_INT_ENABLE)
 
         self._write_register_byte(_REG_INT_ENABLE, 0x0)  # disable interrupts for setup
-        self._write_register_byte(
-            _REG_ACT_INACT_CTL, 0b01110000
-        )  # enable activity on X,Y,Z
+        self._write_register_byte(_REG_ACT_INACT_CTL, 0b01110000)  # enable activity on X,Y,Z
         self._write_register_byte(_REG_THRESH_ACT, threshold)
         self._write_register_byte(_REG_INT_ENABLE, _INT_ACT)  # Inactive interrupt only
 
@@ -339,7 +331,7 @@ class ADXL345:
         threshold: int = 20,
         duration: int = 50,
         latency: int = 20,
-        window: int = 255
+        window: int = 255,
     ):
         """
         The tap detection parameters.
@@ -370,9 +362,7 @@ class ADXL345:
         active_interrupts = self._read_register_unpacked(_REG_INT_ENABLE)
 
         self._write_register_byte(_REG_INT_ENABLE, 0x0)  # disable interrupts for setup
-        self._write_register_byte(
-            _REG_TAP_AXES, 0b00000111
-        )  # enable X, Y, Z axes for tap
+        self._write_register_byte(_REG_TAP_AXES, 0b00000111)  # enable X, Y, Z axes for tap
         self._write_register_byte(_REG_THRESH_TAP, threshold)
         self._write_register_byte(_REG_DUR, duration)
 

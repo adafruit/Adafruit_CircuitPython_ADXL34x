@@ -2,7 +2,9 @@
 # SPDX-License-Identifier: MIT
 
 import time
+
 import board
+
 import adafruit_adxl34x
 
 i2c = board.I2C()  # uses board.SCL and board.SDA
@@ -18,7 +20,7 @@ accelerometer.enable_freefall_detection()
 # accelerometer.enable_freefall_detection(threshold=10,time=25)
 
 while True:
-    print("%f %f %f" % accelerometer.acceleration)
+    print("{} {} {}".format(*accelerometer.acceleration))
 
-    print("Dropped: %s" % accelerometer.events["freefall"])
+    print("Dropped: {}".format(accelerometer.events["freefall"]))
     time.sleep(0.5)

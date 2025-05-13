@@ -3,12 +3,13 @@
 #
 # SPDX-License-Identifier: MIT
 import time
+
 import board
 from adafruit_display_text.bitmap_label import Label
-from terminalio import FONT
 from displayio import Group
-import adafruit_adxl34x
+from terminalio import FONT
 
+import adafruit_adxl34x
 
 # create a main_group to hold anything we want to show on the display.
 main_group = Group()
@@ -39,8 +40,6 @@ board.DISPLAY.root_group = main_group
 while True:
     acc_x, acc_y, acc_z = accelerometer.acceleration
     # Update the label.text property to change the text on the display
-    display_output_label.text = (
-        f"x:{acc_x:.1f} m/s^2 y:{acc_y:.1f} m/s^2 z:{acc_z:.1f} m/s^2"
-    )
+    display_output_label.text = f"x:{acc_x:.1f} m/s^2 y:{acc_y:.1f} m/s^2 z:{acc_z:.1f} m/s^2"
     # wait for a bit
     time.sleep(1)

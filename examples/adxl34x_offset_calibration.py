@@ -2,7 +2,9 @@
 # SPDX-License-Identifier: MIT
 
 import time
+
 import board
+
 import adafruit_adxl34x
 
 i2c = board.STEMMA_I2C()  # uses board.SCL and board.SDA
@@ -31,5 +33,5 @@ accelerometer.offset = (
 print("Calibrated offsets: ", accelerometer.offset)
 
 while True:
-    print("%f %f %f m/s^2" % accelerometer.acceleration)
+    print("{} {} {} m/s^2".format(*accelerometer.acceleration))
     time.sleep(0.2)
