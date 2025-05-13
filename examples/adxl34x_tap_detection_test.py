@@ -2,7 +2,9 @@
 # SPDX-License-Identifier: MIT
 
 import time
+
 import board
+
 import adafruit_adxl34x
 
 i2c = board.I2C()  # uses board.SCL and board.SDA
@@ -18,7 +20,7 @@ accelerometer.enable_tap_detection()
 # accelerometer.enable_tap_detection(tap_count=2,threshold=20, duration=50)
 
 while True:
-    print("%f %f %f" % accelerometer.acceleration)
+    print("{} {} {}".format(*accelerometer.acceleration))
 
-    print("Tapped: %s" % accelerometer.events["tap"])
+    print("Tapped: {}".format(accelerometer.events["tap"]))
     time.sleep(0.5)
